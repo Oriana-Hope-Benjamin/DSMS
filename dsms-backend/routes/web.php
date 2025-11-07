@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController; // Ensure this path is correct
+use App\Http\Controllers\Branches;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,3 +38,8 @@ Route::prefix('auth')->group(function () {
     // --- Add other protected API routes here ---
     // e.g., Route::post('/lessons', [LessonController::class, 'store'])->middleware('auth');
 });
+
+Route::middleware('auth')->group(function () {
+        Route::get('/branches', [Branches::class, 'index']);
+        Route::post('/branches', [Branches::class, 'create']);
+    });
