@@ -112,13 +112,13 @@
             <img class="rounded-circle" src="/assets/img/user.jpg" width="24" alt="Admin" />
             <span class="status online"></span>
           </span>
-          <span>Admin</span>
+          <span v-if="authStore.user"> Hi, {{ authStore.user.name }} </span>
         </a>
         <div class="dropdown-menu">
           <a class="dropdown-item" href="profile.html">My Profile</a>
           <a class="dropdown-item" href="edit-profile.html">Edit Profile</a>
           <a class="dropdown-item" href="settings.html">Settings</a>
-          <a class="dropdown-item" href="login.html">Logout</a>
+          <a class="dropdown-item" href="#" @click.prevent="handleLogout">Logout</a>
         </div>
       </li>
     </ul>
@@ -130,8 +130,30 @@
         <a class="dropdown-item" href="profile.html">My Profile</a>
         <a class="dropdown-item" href="edit-profile.html">Edit Profile</a>
         <a class="dropdown-item" href="settings.html">Settings</a>
-        <a class="dropdown-item" href="login.html">Logout</a>
+        <a class="dropdown-item" href="#" @click.prevent="handleLogout">Logout</a>
       </div>
     </div>
   </div>
+  <AppSidePanel />
 </template>
+<script setup>
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+import AppSidePanel from './AppSidePanel.vue'
+
+const authStore = useAuthStore()
+const router = useRouter()
+
+/**
+ * Handles the logout process.
+ */
+async function handleLogout() {
+  try {
+    await authStore.logout()
+
+    router.push({ name: 'login' })
+  } catch (error) {
+    console.error('Error during logout:', error)
+  }
+}
+</script>
