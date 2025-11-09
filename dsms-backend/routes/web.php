@@ -21,7 +21,7 @@ Route::get('/', function () {
 
 // --- STATEFUL AUTHENTICATION ROUTES ---
 // We prefix with 'api' to keep the URLs consistent for the frontend
-Route::prefix('auth')->group(function () {
+Route::prefix('api')->group(function () {
     
     // Public routes for 'guest' users
     Route::middleware('guest')->group(function () {
@@ -35,11 +35,12 @@ Route::prefix('auth')->group(function () {
         Route::get('/user', [AuthController::class, 'user']);
     });
 
+    Route::middleware('auth')->group(function () {
+        Route::get('/branches', [Branches::class, 'index']);
+        Route::post('/branches', [Branches::class, 'create']);
+        Route::put('/branches/{id}', [Branches::class, 'update']);
+        Route::delete('/branches/{id}', [Branches::class, 'destroy']);
+    });
     // --- Add other protected API routes here ---
     // e.g., Route::post('/lessons', [LessonController::class, 'store'])->middleware('auth');
 });
-
-Route::middleware('auth')->group(function () {
-        Route::get('/branches', [Branches::class, 'index']);
-        Route::post('/branches', [Branches::class, 'create']);
-    });
