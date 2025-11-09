@@ -5,7 +5,9 @@
         <ul>
           <li class="menu-title">Main</li>
           <li class="active">
-            <a href="index-2.html"><i class="fa fa-dashboard"></i> <span>Dashboard</span></a>
+            <router-link :to="{ name: 'dashboard' }">
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+            </router-link>
           </li>
           <li>
             <a href="doctors.html"><i class="fa fa-user"></i> <span>Instructors</span></a>
@@ -17,9 +19,10 @@
             <a href="appointments.html"><i class="fa fa-book"></i> <span>Courses</span></a>
           </li>
           <li>
-            <a href="schedule.html"
-              ><i class="fa fa-calendar-check-o"></i> <span>Branches</span></a
-            >
+            <router-link :to="{ name: 'branches' }">
+              <i class="fa fa-calendar-check-o"></i>
+              <span>Branches</span>
+            </router-link>
           </li>
           <li>
             <a href="departments.html"><i class="fa fa-credit-card-alt"></i> <span>Payments</span></a>

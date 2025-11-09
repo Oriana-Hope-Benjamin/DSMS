@@ -29,7 +29,7 @@ export const useAuthStore = defineStore('auth', () => {
    */
   async function fetchUser() {
     try {
-      const { data } = await axiosClient.get('/auth/user');
+      const { data } = await axiosClient.get('api/user');
       user.value = data;
     } catch (error) {
       
@@ -52,7 +52,7 @@ export const useAuthStore = defineStore('auth', () => {
     await getCsrfCookie();
 
     try {
-      await axiosClient.post('/auth/login', credentials);
+      await axiosClient.post('api/login', credentials);
       // On success, fetch the user to update state
       await fetchUser();
     } catch (error) {
@@ -77,7 +77,7 @@ export const useAuthStore = defineStore('auth', () => {
     await getCsrfCookie();
 
     try {
-      await axiosClient.post('/auth/register', details);
+      await axiosClient.post('api/register', details);
       await fetchUser();
     } catch (error) {
       if (error.response && error.response.status === 422) {
@@ -99,7 +99,7 @@ export const useAuthStore = defineStore('auth', () => {
     errors.value = {};
     
     try {
-      await axiosClient.post('/auth/logout');
+      await axiosClient.post('api/logout');
     } catch (error) {
       console.error('Logout failed:', error);
     } finally {
