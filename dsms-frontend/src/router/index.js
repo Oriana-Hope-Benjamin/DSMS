@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { useAuthStore } from '@/stores/auth';
+import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
 // --- Route Definitions ---
 const routes = [
@@ -7,7 +7,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: () => import('@/views/pages/Dashboard.vue'),
-    meta: { requiresAuth: true }, 
+    meta: { requiresAuth: true },
   },
   {
     path: '/login',
@@ -19,72 +19,83 @@ const routes = [
     path: '/register',
     name: 'register',
     component: () => import('@/views/pages/auth/Register.vue'),
-    meta: { requiresAuth: false }, 
+    meta: { requiresAuth: false },
   },
   {
     path: '/dashboard',
     name: 'dashboard',
     component: () => import('@/views/pages/Dashboard.vue'),
-    meta: { requiresAuth: true }, 
+    meta: { requiresAuth: true },
   },
   {
     path: '/branches',
     name: 'branches',
     component: () => import('@/views/pages/branches/Index.vue'),
-    meta: { requiresAuth: true }, 
+    meta: { requiresAuth: true },
   },
-   {
+  {
     path: '/courses',
     name: 'courses',
     component: () => import('@/views/pages/courses/Index.vue'),
-    meta: { requiresAuth: true }, 
+    meta: { requiresAuth: true },
   },
   {
     path: '/course-details/:id',
     name: 'coursesdetails',
     component: () => import('@/views/pages/courses/CourseDetails/index.vue'),
-    meta: { requiresAuth: true }, 
+    meta: { requiresAuth: true },
   },
-];
+  {
+    path: '/students',
+    name: 'students',
+    component: () => import('@/views/pages/students/Index.vue'),
+    meta: { requiresAuth: true },
+  },
+  {
+    path: '/add-student',
+    name: 'add-student',
+    component: () => import('@/views/pages/students/AddStudent.vue'),
+    meta: { requiresAuth: true },
+  },
+]
 
 // --- Router Instance ---
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
-});
+})
 
 // -- Global Navigation Guard
 
 router.beforeEach(async (to, from, next) => {
-  const authStore = useAuthStore();
-  const isGuestRoute = to.meta.requiresAuth === false;
+  const authStore = useAuthStore()
+  const isGuestRoute = to.meta.requiresAuth === false
 
   if (!authStore.attemptedFetch && !isGuestRoute) {
     try {
-      await authStore.fetchUser();
+      await authStore.fetchUser()
     } catch (e) {
-      console.error('Error in router guard fetchUser (this is expected on 401/419):', e);
+      console.error('Error in router guard fetchUser (this is expected on 401/419):', e)
     }
   }
-  
-  const requiresAuth = to.meta.requiresAuth;
-  const isAuthenticated = authStore.isAuthenticated;
+
+  const requiresAuth = to.meta.requiresAuth
+  const isAuthenticated = authStore.isAuthenticated
 
   if (requiresAuth && !isAuthenticated) {
     next({
       name: 'login',
       query: { redirect: to.fullPath },
-    });
-    return;
+    })
+    return
   }
 
   if (isGuestRoute && isAuthenticated) {
-    next({ name: 'home' });
-    return; 
+    next({ name: 'home' })
+    return
   }
 
-  next();
-});
+  next()
+})
 
-
-export default router;
+export default router

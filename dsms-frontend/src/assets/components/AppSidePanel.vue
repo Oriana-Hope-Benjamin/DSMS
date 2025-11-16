@@ -13,12 +13,14 @@
             <a href="doctors.html"><i class="fa fa-user"></i> <span>Instructors</span></a>
           </li>
           <li>
-            <a href="patients.html"><i class="fa fa-users"></i> <span>Students</span></a>
+            <router-link :to="{ name: 'students' }">
+              <i class="fa fa-users"></i> <span>Students</span>
+            </router-link>
           </li>
           <li>
             <router-link :to="{ name: 'courses' }"
-              ><i class="fa fa-book"></i> <span>Courses</span></router-link
-            >
+              ><i class="fa fa-book"></i> <span>Courses</span>
+            </router-link>
           </li>
           <li>
             <router-link :to="{ name: 'branches' }">
