@@ -35,6 +35,17 @@ Confirm.init({
   cancelButtonColor: '#ffffff',
 })
 
+// Configure Loading (spinner) appearance
+// Uses Notiflix.Loading from the aio bundle
+if (Notiflix && Notiflix.Loading) {
+  Notiflix.Loading.init({
+    backgroundColor: 'rgba(0,0,0,0.75)',
+    svgColor: '#ffffff',
+    // small adjustments for visibility
+    clickToClose: false,
+  })
+}
+
 
 /**
  * Displays a success notification.
@@ -66,6 +77,32 @@ export function showWarning(message) {
  */
 export function showInfo(message) {
   Notify.info(message)
+}
+
+/**
+ * Show a global loading indicator. Message is optional.
+ * @param {string} [message]
+ */
+export function showLoading(message = 'Loading...') {
+  // use the pulse style loader for this app
+  if (Notiflix && Notiflix.Loading && typeof Notiflix.Loading.pulse === 'function') {
+    Notiflix.Loading.pulse(message)
+    return
+  }
+
+  // fallback to standard if pulse isn't available
+  if (Notiflix && Notiflix.Loading && typeof Notiflix.Loading.standard === 'function') {
+    Notiflix.Loading.standard(message)
+  }
+}
+
+/**
+ * Hide the global loading indicator.
+ */
+export function hideLoading() {
+  if (Notiflix && Notiflix.Loading && typeof Notiflix.Loading.remove === 'function') {
+    Notiflix.Loading.remove()
+  }
 }
 
 /**

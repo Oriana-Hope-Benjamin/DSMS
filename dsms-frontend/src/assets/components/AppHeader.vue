@@ -112,7 +112,7 @@
             <img class="rounded-circle" src="/assets/img/user.jpg" width="24" alt="Admin" />
             <span class="status online"></span>
           </span>
-          <span v-if="authStore.user"> Hi, {{ authStore.user.name }} </span>
+          <span v-if="authStore.user"> Hi, {{ authStore.user.firstname }} </span>
         </a>
         <div class="dropdown-menu">
           <a class="dropdown-item" href="profile.html">My Profile</a>

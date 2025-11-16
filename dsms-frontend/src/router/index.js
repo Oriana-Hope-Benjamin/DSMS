@@ -30,7 +30,19 @@ const routes = [
   {
     path: '/branches',
     name: 'branches',
-    component: () => import('@/views/pages/branches/index.vue'),
+    component: () => import('@/views/pages/branches/Index.vue'),
+    meta: { requiresAuth: true }, 
+  },
+   {
+    path: '/courses',
+    name: 'courses',
+    component: () => import('@/views/pages/courses/Index.vue'),
+    meta: { requiresAuth: true }, 
+  },
+  {
+    path: '/course-details/:id',
+    name: 'coursesdetails',
+    component: () => import('@/views/pages/courses/CourseDetails/index.vue'),
     meta: { requiresAuth: true }, 
   },
 ];

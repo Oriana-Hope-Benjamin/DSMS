@@ -6,7 +6,7 @@
           <li class="menu-title">Main</li>
           <li class="active">
             <router-link :to="{ name: 'dashboard' }">
-            <i class="fa fa-dashboard"></i> <span>Dashboard</span>
+              <i class="fa fa-dashboard"></i> <span>Dashboard</span>
             </router-link>
           </li>
           <li>
@@ -16,7 +16,9 @@
             <a href="patients.html"><i class="fa fa-users"></i> <span>Students</span></a>
           </li>
           <li>
-            <a href="appointments.html"><i class="fa fa-book"></i> <span>Courses</span></a>
+            <router-link :to="{ name: 'courses' }"
+              ><i class="fa fa-book"></i> <span>Courses</span></router-link
+            >
           </li>
           <li>
             <router-link :to="{ name: 'branches' }">
@@ -25,7 +27,9 @@
             </router-link>
           </li>
           <li>
-            <a href="departments.html"><i class="fa fa-credit-card-alt"></i> <span>Payments</span></a>
+            <a href="departments.html"
+              ><i class="fa fa-credit-card-alt"></i> <span>Payments</span></a
+            >
           </li>
           <li class="submenu">
             <a href="#"
