@@ -29,6 +29,11 @@ class User extends Authenticatable
         'phone_number',
     ];
 
+    public function student()
+    {
+        return $this->hasOne(\App\Models\Student::class);
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -38,6 +43,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
+
+
 
     /**
      * Get the attributes that should be cast.

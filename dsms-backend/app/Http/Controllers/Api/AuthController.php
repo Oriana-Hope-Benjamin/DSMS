@@ -26,7 +26,7 @@ class AuthController extends Controller
                 'lastname' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8|confirmed',
-                'role_id' => ['required', Rule::in([1, 2, 3])], // Assuming roles are identified by IDs
+                'role_id' => ['required', Rule::in([1, 2, 3])],
                 'branch_id' => 'required|integer',
                 'gender' => 'required|string',
                 'phone_number' => 'required|string|max:50',
