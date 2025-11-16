@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController; // Ensure this path is correct
 use App\Http\Controllers\Branches;
+use App\Http\Controllers\Courses;
+use App\Http\Controllers\Durations;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +24,7 @@ Route::get('/', function () {
 // --- STATEFUL AUTHENTICATION ROUTES ---
 // We prefix with 'api' to keep the URLs consistent for the frontend
 Route::prefix('api')->group(function () {
-    
+
     // Public routes for 'guest' users
     Route::middleware('guest')->group(function () {
         Route::post('/register', [AuthController::class, 'register']);
@@ -33,6 +35,8 @@ Route::prefix('api')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/logout', [AuthController::class, 'logout']);
         Route::get('/user', [AuthController::class, 'user']);
+        Route::apiResource('courses', Courses::class);
+        Route::get('/durations', [Durations::class, 'index']);
     });
 
     Route::middleware('auth')->group(function () {
@@ -41,6 +45,4 @@ Route::prefix('api')->group(function () {
         Route::put('/branches/{id}', [Branches::class, 'update']);
         Route::delete('/branches/{id}', [Branches::class, 'destroy']);
     });
-    // --- Add other protected API routes here ---
-    // e.g., Route::post('/lessons', [LessonController::class, 'store'])->middleware('auth');
 });

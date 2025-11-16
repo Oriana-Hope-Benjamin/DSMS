@@ -22,19 +22,25 @@ class AuthController extends Controller
     {
         try {
             $validatedData = $request->validate([
-                'name' => 'required|string|max:255',
+                'firstname' => 'required|string|max:255',
+                'lastname' => 'required|string|max:255',
                 'email' => 'required|string|email|max:255|unique:users',
                 'password' => 'required|string|min:8|confirmed',
-                'role' => ['required', 'string', Rule::in(['student', 'instructor'])],
-                'phone_number' => 'nullable|string|max:50',
+                'role_id' => ['required', Rule::in([1, 2, 3])], // Assuming roles are identified by IDs
+                'branch_id' => 'required|integer',
+                'gender' => 'required|string',
+                'phone_number' => 'required|string|max:50',
             ]);
 
             $user = User::create([
-                'name' => $validatedData['name'],
+                'firstname' => $validatedData['firstname'],
+                'lastname' => $validatedData['lastname'],
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['password']),
-                'role' => $validatedData['role'],
-                'phone_number' => $validatedData['phone_number'] ?? null,
+                'role_id' => $validatedData['role_id'],
+                'phone_number' => $validatedData['phone_number'],
+                'branch_id' => $validatedData['branch_id'],
+                'gender' => $validatedData['gender']
             ]);
 
             // Log the user in

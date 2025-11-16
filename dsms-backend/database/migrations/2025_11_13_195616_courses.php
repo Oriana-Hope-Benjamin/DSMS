@@ -12,17 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('courses', function (Blueprint $table) {
-            $table->id('id')->primary();
+            $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->unsignedInteger('total_hours')->comment('Total driving hours included');
-            $table->decimal('total_price', 10, 2)->comment('The full price of the course');
-            $table->decimal('initial_deposit_amount', 10, 2)->default(0)->comment('The minimum deposit required to enroll');
-            $table->boolean('status_id')->default(true)->comment('Toggles if the course is visible for enrollment');
+            $table->decimal('base_price', 10, 2);
+            $table->integer('duration_weeks');
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
