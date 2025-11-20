@@ -57,6 +57,12 @@ const routes = [
     component: () => import('@/views/pages/students/AddStudent.vue'),
     meta: { requiresAuth: true },
   },
+  {
+    path: '/student-details/:id',
+    name: 'studentdetails',
+    component: () => import('@/views/pages/students/StudentDetails/Overview.vue'),
+    meta: { requiresAuth: true },
+  },
 ]
 
 // --- Router Instance ---

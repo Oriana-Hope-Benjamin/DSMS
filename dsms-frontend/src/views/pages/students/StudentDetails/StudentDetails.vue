@@ -1,0 +1,3 @@
+<template>
+    student details
+</template>

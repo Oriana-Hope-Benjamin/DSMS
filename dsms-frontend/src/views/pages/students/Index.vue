@@ -165,10 +165,12 @@ onMounted(() => {
                 </thead>
                 <tbody>
                   <tr v-for="student in students" :key="student.id">
+                    <router-link :to="{ name: 'studentdetails', params: { id: student.id } }">
                     <td>
                       <img width="28" height="28" src="/assets/img/user.jpg" class="rounded-circle m-r-5" alt="" />
                       {{ student.user_firstname }} {{ student.user_lastname }}
                     </td>
+                    </router-link>
                     <td>{{ student.student_number }}</td>
                     <td>{{ student.branch_name }}</td>
                     <td>{{ student.user_phone }}</td>
