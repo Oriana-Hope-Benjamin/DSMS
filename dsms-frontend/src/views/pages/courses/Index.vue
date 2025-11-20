@@ -242,7 +242,7 @@ const newCourse = reactive({
 const isEditing = ref(false)
 const editingId = ref(null)
 
-// fetch branches
+// fetch courses
 async function fetchCourses() {
   loading.value = true
   error.value = null
