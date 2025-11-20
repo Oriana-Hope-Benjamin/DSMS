@@ -181,4 +181,24 @@ class StudentController extends Controller
             return response()->json(['message' => 'Failed to update student.', 'error' => $e->getMessage()], 500);
         }
     }
+
+    public function show($id)
+    {
+         $students = DB::table('students')
+            ->leftJoin('users', 'students.user_id', '=', 'users.id')
+            ->leftJoin('branches', 'students.branch_id', '=', 'branches.id')
+            ->select(
+                'students.*',
+                'users.firstname as user_firstname',
+                'users.lastname as user_lastname',
+                'users.email as user_email',
+                'users.phone_number as user_phone',
+                'users.gender as gender',
+                'branches.branch_name as branch_name'
+            )
+            ->where('students.id', $id)
+            ->get();
+
+        return response()->json($students);
+    }
 }
