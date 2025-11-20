@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Student;
 use App\Http\Requests\StoreStudentRequest;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Exception;
 
 class StudentController extends Controller
@@ -26,6 +28,7 @@ class StudentController extends Controller
                 'users.lastname as user_lastname',
                 'users.email as user_email',
                 'users.phone_number as user_phone',
+                'users.gender as gender',
                 'branches.branch_name as branch_name'
             )
             ->get();
@@ -89,6 +92,93 @@ class StudentController extends Controller
                 'message' => 'Failed to register student.',
                 'error'   => $e->getMessage(),
             ], 500);
+        }
+    }
+
+    /**
+     * Update an existing student and its related user record.
+     */
+    public function update(Request $request, $id)
+    {
+        // Find the student or return 404
+        $student = Student::find($id);
+        if (! $student) {
+            return response()->json(['message' => 'Student not found'], 404);
+        }
+
+        $user = $student->user;
+        if (! $user) {
+            return response()->json(['message' => 'Related user not found'], 404);
+        }
+
+        // Validation rules
+        $rules = [
+            'firstname' => 'sometimes|required|string|max:255',
+            'lastname'  => 'sometimes|required|string|max:255',
+            'gender'    => 'sometimes|required|in:male,female',
+            'email'     => 'sometimes|required|email|max:255|unique:users,email,' . $user->id,
+            'phone_number' => 'sometimes|required|string|max:50',
+            'branch_id' => 'sometimes|required|integer|exists:branches,id',
+            'password'  => 'sometimes|nullable|string|min:8|confirmed',
+
+            // student-specific
+            'date_of_birth' => 'sometimes|nullable|date',
+            'nin' => 'sometimes|nullable|string|max:100|unique:students,nin,' . $student->id,
+            'learner_permit_number' => 'sometimes|nullable|string|max:100',
+            'enrollment_date' => 'sometimes|nullable|date',
+            'address' => 'sometimes|nullable|string',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        DB::beginTransaction();
+        try {
+            // Update user fields if provided
+            $userData = [];
+            foreach (['firstname','lastname','gender','email','phone_number','branch_id','role_id'] as $field) {
+                if ($request->has($field)) {
+                    $userData[$field] = $request->input($field);
+                }
+            }
+
+            if (! empty($userData)) {
+                $user->fill($userData);
+            }
+
+            if ($request->filled('password')) {
+                $user->password = Hash::make($request->input('password'));
+            }
+
+            $user->save();
+
+            // Update student fields
+            $studentData = [];
+            foreach (['date_of_birth','nin','branch_id','learner_permit_number','enrollment_date','address'] as $field) {
+                if ($request->has($field)) {
+                    $studentData[$field] = $request->input($field);
+                }
+            }
+
+            if (! empty($studentData)) {
+                $student->fill($studentData);
+                $student->save();
+            }
+
+            DB::commit();
+
+            // Reload relations for response
+            $student->load('user');
+
+            return response()->json([
+                'message' => 'Student updated successfully.',
+                'student' => $student,
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json(['message' => 'Failed to update student.', 'error' => $e->getMessage()], 500);
         }
     }
 }
