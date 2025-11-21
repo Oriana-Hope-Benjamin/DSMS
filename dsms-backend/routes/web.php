@@ -3,9 +3,11 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController; // Ensure this path is correct
 use App\Http\Controllers\Branches;
+use App\Http\Controllers\CourseAddons;
 use App\Http\Controllers\Courses;
 use App\Http\Controllers\Durations;
 use App\Http\Controllers\StudentController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +40,7 @@ Route::prefix('api')->group(function () {
         Route::get('/user', [AuthController::class, 'user']);
         Route::apiResource('courses', Courses::class);
         Route::apiResource('students', StudentController::class);
+        Route::apiResource('course-addons', CourseAddons::class);
         Route::get('/durations', [Durations::class, 'index']);
     });
 
