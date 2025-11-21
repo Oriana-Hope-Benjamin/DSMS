@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('courses', function (Blueprint $table) {
+         Schema::create('courses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('base_price', 10, 2);
-            $table->integer('duration_weeks');
+            $table->integer('duration');
+            $table->integer('duration_value');
+            $table->enum('transmission_type', ['manual', 'automatic'])->default('automatic');
+            $table->integer('lesson_count')->default(0);
+            $table->foreignId('course_addon_id')->constrained('course_addons')->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }
