@@ -40,6 +40,13 @@ class StoreStudentRequest extends FormRequest
             // Foreign keys
             'branch_id'     => 'required|integer',
             'role_id'       => 'required|integer',
+            'course_id'     => 'required|integer|exists:courses,id',
+            'course_addon_id' => 'nullable|integer|exists:course_addons,id',
+
+            //payment fields
+            'amount_paid'  => 'required|numeric|min:200000',
+            'payment_method' => 'required|integer|exists:payment_methods,id',
+            'transaction_reference' => 'nullable|string|max:100|unique:payments,transaction_reference',
         ];
     }
 

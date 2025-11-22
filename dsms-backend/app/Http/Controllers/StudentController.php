@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Student;
+use App\Models\Enrollments;
+use App\Models\EnrollmentAddons;
+use App\Models\Payments;
 use App\Http\Requests\StoreStudentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -69,12 +72,57 @@ class StudentController extends Controller
                 'address'      => $validated['address'],
             ]);
 
+            // --- Enrollment & Payment logic ---
+            // Fetch course base price
+            $basePrice = DB::table('courses')->where('id', $validated['course_id'])->value('base_price') ?? 0;
+
+            // If the request contains a course_addon_id, fetch its price
+            $addonId = $request->input('course_addon_id');
+            $addonPrice = 0;
+            if ($addonId) {
+                $addonPrice = DB::table('course_addons')->where('id', $addonId)->value('price') ?? 0;
+            }
+
+            $totalPrice = $basePrice + $addonPrice;
+
+            // Create enrollment record
+            $enrollment = Enrollments::create([
+                'student_id' => $student->id,
+                'branch_id' => $validated['branch_id'],
+                'course_id' => $validated['course_id'],
+                'enrollment_date' => $validated['enrollment_date'] ?? now(),
+                'amount_paid' => $validated['amount_paid'],
+                'total_price' => $totalPrice,
+                'payment_status_id' => 1,
+                'completion_status' => 1,
+            ]);
+
+            // Create enrollment addon if provided
+            if ($addonId) {
+                EnrollmentAddons::create([
+                    'enrollment_id' => $enrollment->id,
+                    'course_addon_id' => $addonId,
+                    'addon_price' => $addonPrice,
+                ]);
+            }
+
+            // Record payment
+            Payments::create([
+                'enrollment_id' => $enrollment->id,
+                'amount_paid' => $validated['amount_paid'],
+                'payment_method_id' => $validated['payment_method'],
+                'payment_date' => now(),
+                'recorded_by' => $user->id,
+                'transaction_reference' => $validated['transaction_reference'] ?? null,
+            ]);
+
             DB::commit();
 
             return response()->json([
                 'message' => 'Student registered successfully.',
                 'user'    => $user,
                 'student' => $student,
+                'enrollment_id' => $enrollment->id,
             ], 201);
         } catch (Exception $e) {
             DB::rollBack();
