@@ -27,7 +27,7 @@ class StoreStudentRequest extends FormRequest
             'lastname'      => 'required|string|max:100',
             'gender'        => 'required|string|in:male,female,other',
             'email'         => 'required|email|unique:users,email',
-            'phone_number'  => 'required|string|max:20',
+            'phone_number'  => 'required|string|max:20|unique:users,phone_number',
             'password'      => 'required|string|min:8|confirmed',
 
             // Student fields

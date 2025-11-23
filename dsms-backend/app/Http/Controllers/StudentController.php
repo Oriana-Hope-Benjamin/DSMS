@@ -94,7 +94,8 @@ class StudentController extends Controller
                 'amount_paid' => $validated['amount_paid'],
                 'total_price' => $totalPrice,
                 'payment_status_id' => 1,
-                'completion_status' => 1,
+                'enrollment_status_id' => 1,
+                'enrolled_by' => 1
             ]);
 
             // Create enrollment addon if provided

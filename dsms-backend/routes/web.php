@@ -6,6 +6,8 @@ use App\Http\Controllers\Branches;
 use App\Http\Controllers\CourseAddons;
 use App\Http\Controllers\Courses;
 use App\Http\Controllers\Durations;
+use App\Http\Controllers\Payments;
+use App\Http\Controllers\Staff;
 use App\Http\Controllers\StudentController;
 
 
@@ -41,9 +43,11 @@ Route::prefix('api')->group(function () {
         Route::apiResource('courses', Courses::class);
         Route::apiResource('students', StudentController::class);
         Route::apiResource('course-addons', CourseAddons::class);
+         Route::apiResource('staff', Staff::class);
         Route::get('/durations', [Durations::class, 'index']);
+        Route::get('/payments', [Payments::class, 'index']);
+        Route::post('/payments', [Payments::class, 'store']); 
     });
-
     Route::middleware('auth')->group(function () {
         Route::get('/branches', [Branches::class, 'index']);
         Route::post('/branches', [Branches::class, 'create']);

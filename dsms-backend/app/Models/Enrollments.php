@@ -12,7 +12,8 @@ class Enrollments extends Model
         'branch_id',
         'enrollment_date',
         'total_price',
-        'payment_status',
-        'enrollment_status',
+        'payment_status_id',
+        'enrollment_status_id',
+        'enrolled_by',
     ];
 }
