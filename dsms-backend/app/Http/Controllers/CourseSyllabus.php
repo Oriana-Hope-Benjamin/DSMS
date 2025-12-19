@@ -28,6 +28,16 @@ class CourseSyllabus extends Controller
             'order' => 'required|integer|min:1',
             'is_mandatory' => 'required|boolean',
         ]);
+        // Ensure the 'order' value is unique within the same course
+        $orderExists = CourseSyllabusModel::where('course_id', $validated['course_id'])
+            ->where('order', $validated['order'])
+            ->exists();
+
+        if ($orderExists) {
+            return response()->json([
+                'message' => 'A syllabus item with that order already exists for this course. Order must be unique per course.'
+            ], 422);
+        }
 
         try {
             $syllabusItem = CourseSyllabusModel::create($validated);
@@ -49,7 +59,17 @@ class CourseSyllabus extends Controller
      */
     public function show(string $id)
     {
-        //
+        $items = CourseSyllabusModel::where('course_id', $id)
+            ->orderBy('order')
+            ->get();
+
+        if ($items->isEmpty()) {
+            return response()->json(['data' => []], 200);
+        }
+
+        return response()->json([
+            'data' => $items,
+        ], 200);
     }
 
 
