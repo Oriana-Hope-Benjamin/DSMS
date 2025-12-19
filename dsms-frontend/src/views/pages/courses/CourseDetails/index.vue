@@ -6,6 +6,7 @@ import AppHeader from '@/assets/components/AppHeader.vue'
 import Details from './Details.vue';
 import AddOns from './AddOns.vue';
 import { showLoading, hideLoading } from '@/utils/notifications'
+import Lessons from './Lessons.vue';
 
 onMounted(() => {
     showLoading('Loading course details...')
@@ -44,7 +45,7 @@ const courseId = computed(() => route.params.id)
           <div class="tab-content">
             <div class="tab-pane show active" id="bottom-tab1"> <Details :course-id="courseId" /></div>
             <div class="tab-pane" id="bottom-tab2"><AddOns/></div>
-            <div class="tab-pane" id="bottom-tab3">Tab content 3</div>
+            <div class="tab-pane" id="bottom-tab3"><Lessons :course-id="courseId" /></div>
             <div class="tab-pane" id="bottom-tab4">Tab content 4</div>
             <div class="tab-pane" id="bottom-tab5">Tab content 5</div>
           </div>

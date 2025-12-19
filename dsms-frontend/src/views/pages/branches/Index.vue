@@ -12,11 +12,8 @@
           <h4 class="page-title">Branches</h4>
         </div>
         <div class="col-sm-8 col-9 text-right m-b-20">
-          <button
-            type="button"
-            class="btn btn-primary float-right btn-rounded"
-            @click="openModal()"
-          ><i class="fa fa-plus"></i> Add Branch</button>
+          <button type="button" class="btn btn-primary float-right btn-rounded" @click="openModal()"><i
+              class="fa fa-plus"></i> Add Branch</button>
         </div>
       </div>
       <div class="row filter-row">
@@ -53,28 +50,18 @@
                   <td>{{ branch.email }}</td>
                   <td>{{ branch.phone_number }}</td>
                   <td>
-                    <span
-                      class="custom-badge"
-                      :class="branch.status === 'active' ? 'status-green' : 'status-red'"
-                      >{{ branch.status_id }}</span
-                    >
+                    <span class="custom-badge" :class="branch.status === 'active' ? 'status-green' : 'status-red'">{{
+                      branch.status_id }}</span>
                   </td>
                   <td class="text-right">
                     <div class="dropdown dropdown-action">
-                      <a
-                        href="#"
-                        class="action-icon dropdown-toggle"
-                        data-toggle="dropdown"
-                        aria-expanded="false"
-                        ><i class="fa fa-ellipsis-v"></i
-                      ></a>
+                      <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i
+                          class="fa fa-ellipsis-v"></i></a>
                       <div class="dropdown-menu dropdown-menu-right">
-                        <a class="dropdown-item" href="#" @click.prevent="openModal(branch)"
-                          ><i class="fa fa-pencil m-r-5"></i> Edit</a
-                        >
-                        <a class="dropdown-item" href="#" @click.prevent="confirmDelete(branch)"
-                          ><i class="fa fa-trash-o m-r-5"></i> Delete</a
-                        >
+                        <a class="dropdown-item" href="#" @click.prevent="openModal(branch)"><i
+                            class="fa fa-pencil m-r-5"></i> Edit</a>
+                        <a class="dropdown-item" href="#" @click.prevent="confirmDelete(branch)"><i
+                            class="fa fa-trash-o m-r-5"></i> Delete</a>
                       </div>
                     </div>
                   </td>
@@ -88,14 +75,8 @@
   </div>
 
   <!-- Add Branch Modal -->
-  <div
-    class="modal fade"
-    id="exampleModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-  >
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -112,9 +93,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="form-group">
-                  <label class="col-form-label"
-                    >Branch Name <span class="text-danger">*</span></label
-                  >
+                  <label class="col-form-label">Branch Name <span class="text-danger">*</span></label>
                   <input class="form-control" type="text" v-model="newBranch.branch_name" />
                   <span v-if="validationErrors.branch_name" class="error text-danger">
                     {{ validationErrors.branch_name[0] }}
@@ -334,34 +313,12 @@ async function deleteBranch(id) {
 }
 
 function closeModal() {
-  try {
-    const modalEl = document.getElementById('exampleModal')
-
-    // Bootstrap 5 native API
-    if (window.bootstrap && window.bootstrap.Modal) {
-      const bsModal = window.bootstrap.Modal.getInstance(modalEl) || new window.bootstrap.Modal(modalEl)
-      bsModal.hide()
-      return
-    }
-  } catch (e) {
-    // ignore
-  }
-
   // jQuery / Bootstrap 4
   if (window.jQuery) {
     window.jQuery('#exampleModal').modal('hide')
     return
   }
 
-  // fallback: simple DOM hide + remove backdrop
-  const el = document.getElementById('exampleModal')
-  if (el) {
-    el.classList.remove('show')
-    el.style.display = 'none'
-    el.setAttribute('aria-hidden', 'true')
-  }
-  const backdrop = document.querySelector('.modal-backdrop')
-  if (backdrop && backdrop.parentNode) backdrop.parentNode.removeChild(backdrop)
 }
 
 onMounted(() => {
