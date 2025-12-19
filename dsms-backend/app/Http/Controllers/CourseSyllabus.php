@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\CourseSyllabus as CourseSyllabusModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -90,6 +91,17 @@ class CourseSyllabus extends Controller
         if (!$syllabusItem) {
             return response()->json(['message' => 'Course syllabus item not found.'], 404);
         }
+        
+        $orderExists = CourseSyllabusModel::where('course_id', $validated['course_id'])
+            ->where('order', $validated['order'])
+            ->exists();
+
+        if ($orderExists) {
+            return response()->json([
+                'message' => 'A syllabus item with that order already exists for this course. Order must be unique per course.'
+            ], 422);
+        }
+
         try {
             $syllabusItem->update($validated);
 
