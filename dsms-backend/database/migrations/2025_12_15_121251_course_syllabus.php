@@ -11,13 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('staff', function (Blueprint $table) {
+        Schema::create('course_syllabus', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->string('license_number')->unique()->nullable();
-            $table->date('hire_date');
-            $table->foreignId('transmission_type')->nullable()->constrained('transmission_types')->onDelete('cascade');
+            $table->foreignId('course_id')->constrained('courses')->onDelete('cascade');
+            $table->string('title');
+            $table->text('description');
+            $table->integer('order');
+            $table->integer('is_mandatory')->default(1);
             $table->timestamps();
+            
         });
     }
 
