@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter, useRoute } from 'vue-router'
+import { showSuccess, showError } from '@/utils/notifications'
 
 const authStore = useAuthStore()
 const router = useRouter()
@@ -17,6 +18,7 @@ async function handleLogin() {
 
   try {
     await authStore.login(form.value)
+   
 
     const redirectPath = route.query.redirect
 
@@ -27,6 +29,7 @@ async function handleLogin() {
     }
   } catch (error) {
     console.error('Login failed in component:', error)
+    showError('Login failed. Please check your credentials.')
   }
 }
 </script>
@@ -35,8 +38,11 @@ async function handleLogin() {
     <div class="account-page">
       <div class="account-center">
         <div class="account-box">
-          <div v-if="authStore.errors.message" class="error">
+          <div v-if="authStore.errors.message" class="alert alert-danger">
             {{ authStore.errors.message }}
+          </div>
+          <div v-if="Object.keys(authStore.errors).length > 0 && !authStore.errors.message" class="alert alert-danger">
+            Please check the errors below.
           </div>
           <form class="form-signin" @submit.prevent="handleLogin">
             <div class="account-logo">
@@ -44,17 +50,17 @@ async function handleLogin() {
             </div>
             <div class="form-group">
               <label>Email</label>
-              <input type="text" class="form-control" v-model="form.email" required />
+              <input type="email" class="form-control" v-model="form.email" required />
             </div>
-            <div v-if="authStore.errors.email" class="error">
-              {{ authStore.errors.email[0] }}
+            <div v-if="authStore.errors.email" class="small text-danger mt-1">
+              {{ Array.isArray(authStore.errors.email) ? authStore.errors.email[0] : authStore.errors.email }}
             </div>
             <div class="form-group">
               <label>Password</label>
               <input type="password" class="form-control" v-model="form.password" required />
             </div>
-            <div v-if="authStore.errors.password" class="error">
-              {{ authStore.errors.password[0] }}
+            <div v-if="authStore.errors.password" class="small text-danger mt-1">
+              {{ Array.isArray(authStore.errors.password) ? authStore.errors.password[0] : authStore.errors.password }}
             </div>
             <div class="form-group text-right">
               <a href="forgot-password.html">Forgot your password?</a>

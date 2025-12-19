@@ -1,6 +1,7 @@
 import { ref, computed } from 'vue';
 import { defineStore } from 'pinia';
 import axiosClient from '@/api/axios';
+import { showSuccess, showError } from '@/utils/notifications'
 
 export const useAuthStore = defineStore('auth', () => {
   //states
@@ -31,6 +32,7 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       const { data } = await axiosClient.get('api/user');
       user.value = data;
+      showSuccess('Login successful!')
     } catch (error) {
       
       console.error('Error fetching user:', error);
@@ -59,7 +61,7 @@ export const useAuthStore = defineStore('auth', () => {
       if (error.response && error.response.status === 422) {
         errors.value = error.response.data.errors;
       } else {
-        console.error('Login failed:', error);
+        errors.value = error.response?.data || { general: 'Login failed. Please try again.' };
       }
     } finally {
       loading.value = false;
